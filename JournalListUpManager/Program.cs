@@ -1,4 +1,4 @@
-﻿namespace JournalList
+﻿namespace JournalListUpManager
 {
     public class Program
     {

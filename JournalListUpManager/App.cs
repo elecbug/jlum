@@ -1,5 +1,5 @@
 ﻿
-namespace JournalList
+namespace JournalListUpManager
 {
     internal class App
     {
