@@ -1,7 +1,11 @@
+using Microsoft.Web.WebView2.WinForms;
+
 namespace JLUM
 {
     public class MainForm : Form
     {
+        public SplitContainer MainSplitContainer { get; private set; }
+
         /// <summary>
         /// MainForm constructor that initializes the form with the provided arguments.
         /// </summary>
@@ -13,6 +17,8 @@ namespace JLUM
             // Set up the main form properties
             {
                 Text = "Journal List-up Manager";
+                Location = MainFormSettings.Default.Location;
+                StartPosition = FormStartPosition.Manual;
                 Size = MainFormSettings.Default.Size;
                 Padding = new Padding(10);
                 Font = new Font("Arial", 10);
@@ -20,12 +26,27 @@ namespace JLUM
                 FormClosing += MainFormClosing;
             }
 
-            GroupBox mainGroupBox = new GroupBox
+            GroupBox mainGroupBox = new GroupBox()
             {
                 Parent = this,
                 Dock = DockStyle.Fill,
                 Text = MainFormSettings.Default.JournalListUpDirectory,
-                Margin = new Padding(10),
+                Padding = new Padding(5),
+            };
+
+            MainSplitContainer = new SplitContainer()
+            {
+                Parent = mainGroupBox,
+                Dock = DockStyle.Fill,
+                Orientation = Orientation.Vertical,
+                SplitterDistance  = MainFormSettings.Default.SplitterDistance,
+            };
+
+            WebView2 webView = new WebView2()
+            {
+                Parent = MainSplitContainer.Panel1,
+                Dock = DockStyle.Fill,
+                Source = new Uri(MainFormSettings.Default.LatestViewPDF),
             };
         }
 
@@ -58,6 +79,7 @@ namespace JLUM
                 else
                 {
                     MainFormSettings.Default.JournalListUpDirectory = args[0];
+                    MainFormSettings.Default.LatestViewPDF = args[0];
                     MainFormSettings.Default.Save();
                 }
             }
@@ -95,7 +117,10 @@ namespace JLUM
             }
             else if (result == DialogResult.Yes)
             {
+                MainFormSettings.Default.Location = Location;
                 MainFormSettings.Default.Size = Size;
+                MainFormSettings.Default.SplitterDistance = MainSplitContainer.SplitterDistance;
+
                 MainFormSettings.Default.Save();
             }
         }
