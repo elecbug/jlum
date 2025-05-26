@@ -1,1 +1,1 @@
-# JournalList
+# Journal List-up Manager

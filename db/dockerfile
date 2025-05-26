@@ -1,0 +1,10 @@
+FROM mysql:8.0
+
+VOLUME ["/mount"]
+
+ENV MYSQL_ROOT_PASSWORD=jlum_root
+ENV MYSQL_DATABASE=jlum_db
+ENV MYSQL_USER=jlum_user
+ENV MYSQL_PASSWORD=jlum_pass
+
+CMD ["mysqld", "--datadir=/mount"]
