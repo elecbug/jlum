@@ -18,3 +18,4 @@ sudo docker run -d \
   -e MYSQL_USER=jlum_user \
   -e MYSQL_PASSWORD="$MYSQL_PASS" \
   jlum_db
+
