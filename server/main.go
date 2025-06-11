@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"jlum-server/internal/db"
+	"log"
 )
 
 func main() {
@@ -12,22 +13,34 @@ func main() {
 	db.InitDB(*dbPassword)
 	defer db.DB.Close()
 
-	// 사용 예시
-	affiliationID, _ := db.InsertAffiliation("KNU", "https://knu.ac.kr")
-	authorRoleID, _ := db.InsertAuthorRole("제1저자")
-	journalID, _ := db.InsertJournal("Journal of AI", "https://ai-journal.org")
-	journalDbID, _ := db.InsertJournalDB("Scopus")
-	paperTagID, _ := db.InsertPaperTag("AI")
+	testDBOperations()
+}
 
-	authorID, _ := db.InsertAuthor("홍길동", "Gil-Dong Hong", "gil@example.com", "0000-0000-0000-0000", affiliationID)
-	paperID, _ := db.InsertPaper("논문 제목", int(journalID), 1, 1, 100, 120, 2025, 6,
-		"10.doi/abc", "isbn", "issn", "eissn", "초록입니다", "test name", "", ([]byte)("temp"))
+func testDBOperations() {
+	// Test Insert
+	affiliation := &db.Affiliation{Name: "Test University", Link: "http://testuniversity.edu"}
+	id, err := db.InsertAffiliation(affiliation)
+	if err != nil {
+		log.Fatalf("InsertAffiliation failed: %v", err)
+	}
+	log.Printf("Inserted Affiliation with ID: %d", id)
 
-	db.InsertPaperAuthor(paperID, authorID, authorRoleID)
-	db.InsertJournalDBLink(journalID, journalDbID)
-	db.InsertPaperKeyword(paperID, "딥러닝")
-	db.LinkPaperTag(paperID, paperTagID)
+	// Test Get
+	retrievedAffiliation, err := db.GetAffiliation("id", id)
+	if err != nil {
+		log.Fatalf("GetAffiliation failed: %v", err)
+	}
+	log.Printf("Retrieved Affiliation: %+v", retrievedAffiliation)
 
-	userID, _ := db.InsertUser("admin", "hashed_password", "admin@example.com")
-	db.InsertRecord(paperID, userID, "중요 논문입니다.")
+	// Test Update
+	if err := db.UpdateAffiliation("id", id, "name", "Updated University"); err != nil {
+		log.Fatalf("UpdateAffiliation failed: %v", err)
+	}
+	log.Println("Updated Affiliation name")
+
+	// Test Delete
+	if err := db.DeleteAffiliation("id", id); err != nil {
+		log.Fatalf("DeleteAffiliation failed: %v", err)
+	}
+	log.Println("Deleted Affiliation")
 }

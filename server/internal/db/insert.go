@@ -6,64 +6,67 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 )
 
-// affiliation
-func InsertAffiliation(name, link string) (int64, error) {
-	res, err := DB.Exec(`INSERT INTO affiliation (name, link) VALUES (?, ?)`, name, link)
+// InsertAffiliation inserts a new affiliation record
+func InsertAffiliation(affiliation *Affiliation) (int64, error) {
+	res, err := DB.Exec(`INSERT INTO affiliation (name, link) VALUES (?, ?)`,
+		affiliation.Name, affiliation.Link)
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// author
-func InsertAuthor(name, englishName, email, orcid string, affiliationID int64) (int64, error) {
+// InsertAuthor inserts a new author record
+func InsertAuthor(author *Author) (int64, error) {
 	res, err := DB.Exec(`
         INSERT INTO author (name, english_name, email, orcid, affiliation_id)
-        VALUES (?, ?, ?, ?, ?)`, name, englishName, email, orcid, affiliationID)
+        VALUES (?, ?, ?, ?, ?)`,
+		author.Name, author.EnglishName, author.Email, author.ORCID, author.AffiliationID)
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// author_role
-func InsertAuthorRole(name string) (int64, error) {
-	res, err := DB.Exec(`INSERT INTO author_role (name) VALUES (?)`, name)
+// InsertAuthorRole inserts a new author role record
+func InsertAuthorRole(role *AuthorRole) (int64, error) {
+	res, err := DB.Exec(`INSERT INTO author_role (name) VALUES (?)`, role.Name)
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// journal_db
-func InsertJournalDB(name string) (int64, error) {
-	res, err := DB.Exec(`INSERT INTO journal_db (name) VALUES (?)`, name)
+// InsertJournalDB inserts a new journal database record
+func InsertJournalDB(journalDB *JournalDB) (int64, error) {
+	res, err := DB.Exec(`INSERT INTO journal_db (name) VALUES (?)`, journalDB.Name)
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// journal
-func InsertJournal(title, link string) (int64, error) {
-	res, err := DB.Exec(`INSERT INTO journal (title, link) VALUES (?, ?)`, title, link)
+// InsertJournal inserts a new journal record
+func InsertJournal(journal *Journal) (int64, error) {
+	res, err := DB.Exec(`INSERT INTO journal (title, link) VALUES (?, ?)`,
+		journal.Title, journal.Link)
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// paper
-func InsertPaper(title string, journalID, volume, issue, pageS, pageE, year, month int,
-	doi, isbn, issn, eissn, abstract, fileName, fileType string, fileData []byte) (int64, error) {
-
+// InsertPaper inserts a new paper record
+func InsertPaper(paper *Paper) (int64, error) {
 	res, err := DB.Exec(`
         INSERT INTO paper (
             title, journal_id, volume, issue, page_s, page_e, year, month,
             doi, isbn, issn, eissn, abstract, file_data, file_name, file_type
         ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-		title, journalID, volume, issue, pageS, pageE, year, month,
-		doi, isbn, issn, eissn, abstract, fileData, fileName, fileType)
+		paper.Title, paper.JournalID, paper.Volume, paper.Issue,
+		paper.PageS, paper.PageE, paper.Year, paper.Month,
+		paper.DOI, paper.ISBN, paper.ISSN, paper.EISSN,
+		paper.Abstract, paper.FileData, paper.FileName, paper.FileType)
 
 	if err != nil {
 		return 0, err
@@ -71,76 +74,82 @@ func InsertPaper(title string, journalID, volume, issue, pageS, pageE, year, mon
 	return res.LastInsertId()
 }
 
-// paper_author
-func InsertPaperAuthor(paperID, authorID, roleID int64) (int64, error) {
+// InsertPaperAuthor inserts a new paper-author relationship record
+func InsertPaperAuthor(paperAuthor *PaperAuthor) (int64, error) {
 	res, err := DB.Exec(`INSERT INTO paper_author (paper_id, author_id, author_role_id) VALUES (?, ?, ?)`,
-		paperID, authorID, roleID)
+		paperAuthor.PaperID, paperAuthor.AuthorID, paperAuthor.AuthorRoleID)
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// journal_journal_db
-func InsertJournalDBLink(journalID, dbID int64) (int64, error) {
-	res, err := DB.Exec(`INSERT INTO journal_journal_db (journal_id, journal_db_id) VALUES (?, ?)`, journalID, dbID)
+// InsertJournalJournalDB inserts a new journal-database relationship record
+func InsertJournalJournalDB(link *JournalJournalDB) (int64, error) {
+	res, err := DB.Exec(`INSERT INTO journal_journal_db (journal_id, journal_db_id) VALUES (?, ?)`,
+		link.JournalID, link.JournalDBID)
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// paper_reference
-func InsertPaperReference(paperID, refID int64) (int64, error) {
-	res, err := DB.Exec(`INSERT INTO paper_reference (paper_id, reference_paper_id) VALUES (?, ?)`, paperID, refID)
+// InsertPaperReference inserts a new paper reference record
+func InsertPaperReference(reference *PaperReference) (int64, error) {
+	res, err := DB.Exec(`INSERT INTO paper_reference (paper_id, reference_paper_id) VALUES (?, ?)`,
+		reference.PaperID, reference.ReferencePaperID)
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// paper_keyword
-func InsertPaperKeyword(paperID int64, keyword string) (int64, error) {
-	res, err := DB.Exec(`INSERT INTO paper_keyword (paper_id, keyword) VALUES (?, ?)`, paperID, keyword)
+// InsertPaperKeyword inserts a new paper keyword record
+func InsertPaperKeyword(keyword *PaperKeyword) (int64, error) {
+	res, err := DB.Exec(`INSERT INTO paper_keyword (paper_id, keyword) VALUES (?, ?)`,
+		keyword.PaperID, keyword.Keyword)
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// paper_tag
-func InsertPaperTag(name string) (int64, error) {
-	res, err := DB.Exec(`INSERT INTO paper_tag (name) VALUES (?)`, name)
+// InsertPaperTag inserts a new paper tag record
+func InsertPaperTag(tag *PaperTag) (int64, error) {
+	res, err := DB.Exec(`INSERT INTO paper_tag (name) VALUES (?)`, tag.Name)
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// paper_paper_tag
-func LinkPaperTag(paperID, tagID int64) (int64, error) {
-	res, err := DB.Exec(`INSERT INTO paper_paper_tag (paper_id, paper_tag_id) VALUES (?, ?)`, paperID, tagID)
+// InsertPaperPaperTag inserts a new paper-tag relationship record
+func InsertPaperPaperTag(link *PaperPaperTag) (int64, error) {
+	res, err := DB.Exec(`INSERT INTO paper_paper_tag (paper_id, paper_tag_id) VALUES (?, ?)`,
+		link.PaperID, link.PaperTagID)
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// user
-func InsertUser(username, password, email string) (int64, error) {
-	res, err := DB.Exec(`INSERT INTO user (username, password, email) VALUES (?, ?, ?)`, username, password, email)
+// InsertUser inserts a new user record
+func InsertUser(user *User) (int64, error) {
+	res, err := DB.Exec(`INSERT INTO user (username, password, email) VALUES (?, ?, ?)`,
+		user.Username, user.Password, user.Email)
 	if err != nil {
 		return 0, err
 	}
 	return res.LastInsertId()
 }
 
-// record
-func InsertRecord(paperID, userID int64, note string) (int64, error) {
+// InsertRecord inserts a new record
+func InsertRecord(record *Record) (int64, error) {
 	now := time.Now()
 	res, err := DB.Exec(`
         INSERT INTO record (paper_id, user_id, note, created_at, updated_at)
-        VALUES (?, ?, ?, ?, ?)`, paperID, userID, note, now, now)
+        VALUES (?, ?, ?, ?, ?)`,
+		record.PaperID, record.UserID, record.Note, now, now)
 	if err != nil {
 		return 0, err
 	}
