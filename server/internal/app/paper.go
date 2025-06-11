@@ -26,13 +26,6 @@ type Paper struct {
 	Tags         []int    `json:"tags"`
 }
 
-type User struct {
-	ID       int    `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Email    string `json:"email"`
-}
-
 type Record struct {
 	ID        int       `json:"id"`
 	PaperID   int       `json:"paper_id"`
@@ -72,17 +65,17 @@ type PaperTag struct {
 
 type AuthorRole string
 
-func (_ AuthorRole) First() string                 { return "First author" }
-func (_ AuthorRole) Corresponding() string         { return "Corresponding author" }
-func (_ AuthorRole) Corperation() string           { return "Co-author" }
-func (_ AuthorRole) PrincipalInvestigator() string { return "Principal investigator" }
-func (_ AuthorRole) CoFirst() string               { return "Co-first author" }
-func (_ AuthorRole) Other() string                 { return "Other author" }
+func (AuthorRole) First() string                 { return "First author" }
+func (AuthorRole) CoFirst() string               { return "Co-first author" }
+func (AuthorRole) Co() string                    { return "Co-author" }
+func (AuthorRole) Corresponding() string         { return "Corresponding author" }
+func (AuthorRole) PrincipalInvestigator() string { return "Principal investigator" }
+func (AuthorRole) Other() string                 { return "Other author" }
 
 type JournalDB string
 
-func (_ JournalDB) KCI() string    { return "KCI" }
-func (_ JournalDB) SCI() string    { return "SCI" }
-func (_ JournalDB) SCIE() string   { return "SCIE Korea" }
-func (_ JournalDB) SCOPUS() string { return "SCOPUS" }
-func (_ JournalDB) IEEE() string   { return "IEEE" }
+func (JournalDB) KCI() string    { return "KCI" }
+func (JournalDB) SCI() string    { return "SCI" }
+func (JournalDB) SCIE() string   { return "SCIE Korea" }
+func (JournalDB) SCOPUS() string { return "SCOPUS" }
+func (JournalDB) IEEE() string   { return "IEEE" }
