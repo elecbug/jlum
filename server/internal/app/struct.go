@@ -1,4 +1,4 @@
-package paper
+package app
 
 import "time"
 
