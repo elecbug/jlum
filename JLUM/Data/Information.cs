@@ -25,7 +25,7 @@ namespace JLUM.Data
             DB = DB.None,
         };
 
-        public override string ToString()
+        public string ToIEEE()
         {
             string result = "";
             List<string> results = [];
@@ -38,12 +38,12 @@ namespace JLUM.Data
                 results.Add($"No. {Number}");
             if (!string.IsNullOrEmpty(Issue))
                 results.Add($"Issue {Issue}");
-            if (Page.ToString() != "")
-                results.Add(Page.ToString());
-            if (Date.ToString() != "")
-                results.Add(Date.ToString());
-            if (Identifiers.ToString() != "")
-                results.Add(Identifiers.ToString());
+            if (Page.ToIEEE() != "")
+                results.Add(Page.ToIEEE());
+            if (Date.ToIEEE() != "")
+                results.Add(Date.ToIEEE());
+            if (Identifiers.ToIEEE() != "")
+                results.Add(Identifiers.ToIEEE());
 
             result = string.Join(", ", results);
 
@@ -84,7 +84,7 @@ namespace JLUM.Data
             EISSN = ""
         };
 
-        public override string ToString()
+        public string ToIEEE()
         {
             List<string> results = [];
             if (!string.IsNullOrEmpty(DOI))
@@ -114,7 +114,7 @@ namespace JLUM.Data
             End = -1,
         };
 
-        public override string ToString()
+        public string ToIEEE()
         {
             if (Start == -1 && End == -1)
                 return "";
@@ -149,7 +149,7 @@ namespace JLUM.Data
             Month = -1,
         };
 
-        public override string ToString()
+        public string ToIEEE()
         {
             if (Year == -1 && Month == -1)
                 return "";

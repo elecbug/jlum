@@ -15,7 +15,7 @@
             AuthorRole = AuthorRole.Unknown
         };
 
-        public override string ToString()
+        public string ToIEEE()
         {
             return $"{Name}";
         }
@@ -25,7 +25,8 @@
     {
         Unknown = 0,
         FirstAuthor = 1,
-        CoAuthor = 2,
-        CorrespondingAuthor = 3,
+        SecondAuthor = 2,
+        CoAuthor = 3,
+        CorrespondingAuthor = 4,
     }
 }

@@ -33,26 +33,26 @@ namespace JLUM.Data
             JournalURL = ""
         };
 
-        public override string ToString()
+        public string ToIEEE()
         {
             if (Authors.Count == 0)
                 Authors.Add(new Author() { Name = "[WARNING]DO_NOT_FIND_AUTHORS" });
 
             List<Author> authors = Authors[0..(Authors.Count - 1)];
             Author lastAuthor = Authors[Authors.Count - 1];
-            string authorString = string.Join(", ", authors.Select(a => a.ToString()));
+            string authorString = string.Join(", ", authors.Select(a => a.ToIEEE()));
 
             if (authors.Count > 0)
             {
-                authorString += " and " + lastAuthor.ToString();
+                authorString += " and " + lastAuthor.ToIEEE();
             }
             else
             {
-                authorString = lastAuthor.ToString();
+                authorString = lastAuthor.ToIEEE();
             }
 
             string titleString = Title != "" ? $"\"{Title}\"" : "[WARNING]DOES_NOT_FIND_TITLE";
-            string informationString = Information.ToString();
+            string informationString = Information.ToIEEE();
             informationString = informationString != "" ? informationString : "[WARNING]DOES_NOT_FIND_INFORMATION";
 
             string result = string.Join(", ", [authorString, titleString, informationString]);
@@ -79,12 +79,10 @@ namespace JLUM.Data
         }
     }
 
-
     public enum Languages
     {
         Unknown = 0,
         Korean = 1,
         English = 2,
     }
-
 }
