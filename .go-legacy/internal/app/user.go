@@ -3,6 +3,7 @@ package app
 import (
 	"html/template"
 	"net/http"
+	"time"
 )
 
 type User struct {
@@ -10,6 +11,15 @@ type User struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Email    string `json:"email"`
+}
+
+type Record struct {
+	ID        ID        `json:"id"`
+	PaperID   ID        `json:"paper_id"`
+	UserID    ID        `json:"user_id"`
+	Note      string    `json:"note"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 // ServeLoginForm serves a login form to the user
